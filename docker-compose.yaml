@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  node-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - 3000:3000
+    container_name: node-app
+    networks:
+      - nodenet
+    depends_on:
+      - db-node
+  
+  db-node:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db-node
+      # caso o container pare de rodar ele volta a rodar sozinho
+    restart: always
+      # habilita para entrar no sistema atraves do terminal
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks: 
+      - nodenet
+    
+  nginx-node:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - node-app
+    networks:
+      - nodenet
+
+networks:
+  nodenet:
+    driver: bridge
+    
