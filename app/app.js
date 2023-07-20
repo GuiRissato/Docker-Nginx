@@ -14,12 +14,6 @@ const mysql = require('mysql')
 
 const connection = mysql.createConnection(config)
 
-const sql = `INSERT INTO people(name) values('Guilherme')`
-const sql_two = `INSERT INTO people(name) values('Wesley')`
-
-connection.query(sql)
-connection.query(sql_two)
-
 const select = `SELECT name FROM people`
 
 //Define request response in root URL (/)
