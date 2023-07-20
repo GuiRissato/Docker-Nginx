@@ -13,6 +13,11 @@ RUN apt-get update \
 
 RUN npm install
 
+COPY entrypoint.sh /usr/src/app/
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+CMD ["/usr/src/app/entrypoint.sh"]
+
 FROM node:alpine
 
 WORKDIR /usr/src/app
