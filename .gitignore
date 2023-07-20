@@ -130,4 +130,4 @@ dist
 
 mysql/auto.cnf
 
-mysql_data/*.pem
+/mysql

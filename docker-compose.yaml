@@ -17,7 +17,7 @@ services:
   
   db-node:
     image: mysql:5.7
-    command: --innodb-use-native-aio=0
+    command: --innodb-use-native-aio=0 --init-file /docker-entrypoint-initdb.d/init.sql
     container_name: db-node
       # caso o container pare de rodar ele volta a rodar sozinho
     restart: always
@@ -25,6 +25,7 @@ services:
     tty: true
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
