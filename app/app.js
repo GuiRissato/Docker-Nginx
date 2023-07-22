@@ -16,8 +16,8 @@ const connection = mysql.createConnection(config)
 
 const select = `SELECT name FROM people`
 
-//Define request response in root URL (/)
 app.get('/', function (req, res) {
+
   connection.query(select, (err, results) => {
     if (err) {
       console.error('Erro ao executar a consulta:', err);
@@ -32,7 +32,6 @@ app.set('view engine', 'ejs');
 
 app.set('views', __dirname + '/views');
 
-//Launch listening server on port 8080
 app.listen(port, function () {
   console.log(`app listening on port ${port}!`)
 })

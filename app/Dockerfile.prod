@@ -4,27 +4,22 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-ENV DOCKERIZE_VERSION=v0.7.0
-
-RUN apt-get update \
-    && apt-get install -y wget \
-    && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
-    && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
-
 RUN npm install
-
-COPY entrypoint.sh /usr/src/app/
-RUN chmod +x /usr/src/app/entrypoint.sh
-
-CMD ["/usr/src/app/entrypoint.sh"]
 
 FROM node:alpine
 
 WORKDIR /usr/src/app
 RUN rm -rf /usr/src/app/*
 
+ENV DOCKERIZE_VERSION v0.7.0
+
+RUN apk update --no-cache \
+    && apk add --no-cache wget openssl \
+    && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
+    && apk del wget
+
 COPY --from=builder /usr/src/app .
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD [ "node", "app.js" ]

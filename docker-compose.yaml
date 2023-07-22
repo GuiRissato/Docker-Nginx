@@ -12,6 +12,9 @@ services:
     container_name: node-app
     networks:
       - nodenet
+    volumes:
+      - ./app:/usr/src/app
+    tty: true
     depends_on:
       - db-node
   
