@@ -10,6 +10,8 @@ services:
     ports:
       - 3000:3000
     container_name: node-app
+    entrypoint: dockerize -wait tcp://db-node:3306 -timeout 15s docker-entrypoint.sh
+    command: node app.js
     networks:
       - nodenet
     volumes:
@@ -47,6 +49,8 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - node-app
+    entrypoint: dockerize -wait tcp://node-app:3000 -timeout 60s
+    command: ["nginx", "-g", "daemon off;"]
     networks:
       - nodenet
 
